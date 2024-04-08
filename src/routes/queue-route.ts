@@ -5,17 +5,31 @@ import queue from "../utils/queue-client";
 import logstashClient from "../utils/logstash-client";
 import queueBatchProcessor from "../utils/queue-batch-processor";
 
+type logType = {
+  timestamp?: string;
+  version?: string | number;
+  service?: string;
+  application?: string;
+  environment?: string;
+  logLevel?: string;
+  host?: string;
+  message?: string;
+};
+
 setInterval(async () => {
   await queueBatchProcessor(queue, logstashClient);
-}, 10000);
+}, 1000);
 
 router.post("/log", async (req: Request, res: Response) => {
   try {
-    const { log } = req.body;
-    const job = await queue.add(v4(), log, { removeOnComplete: true });
+    const { logs } = req.body;
+    await queue.addBulk(
+      logs.map((log: logType) => {
+        v4(), log;
+      })
+    );
     res.json({
       success: true,
-      jobId: job.id,
     });
   } catch (err) {
     res.json({
