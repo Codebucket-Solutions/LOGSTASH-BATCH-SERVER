@@ -22,6 +22,10 @@ setInterval(async () => {
 
 router.post("/log", async (req: Request, res: Response) => {
   try {
+    let apiKey = req.headers["x-api-key"];
+    if (apiKey != process.env.API_KEY) {
+      throw new Error("Invalid Api Key");
+    }
     const { logs } = req.body;
     await queue.addBulk(
       logs.map((log: logType) => ({

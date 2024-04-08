@@ -21,10 +21,6 @@ app
   .use(bodyParser.json({ limit: "100mb" }))
   .use(queueRoute);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Logstash Server Reading");
-});
-
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   handleError(err, res);
 });
