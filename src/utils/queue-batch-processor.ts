@@ -3,15 +3,15 @@ import Logstash from "./logstash";
 
 export default async (queue: Queue, logstash: Logstash) => {
   const jobs = await queue.getJobs(undefined, 0, -1, true);
-  let jobData = "";
+  let jobData = [];
   for (let job of jobs) {
-    jobData = jobData + JSON.stringify(job.data) + "\r\n";
+    jobData.push(job.data);
   }
-  if (jobData.length > 0) {
+  if(jobData.length>0) {
     logstash.log(jobData, async () => {
-      for (let job of jobs) {
-        await job.remove();
-      }
-    });
+        for (let job of jobs) {
+          await job.remove();
+        }
+      });
   }
 };
