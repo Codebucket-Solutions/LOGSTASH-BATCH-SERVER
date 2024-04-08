@@ -24,9 +24,10 @@ router.post("/log", async (req: Request, res: Response) => {
   try {
     const { logs } = req.body;
     await queue.addBulk(
-      logs.map((log: logType) => {
-        v4(), log;
-      })
+      logs.map((log: logType) => ({
+        name: v4(),
+        data: log,
+      }))
     );
     res.json({
       success: true,
