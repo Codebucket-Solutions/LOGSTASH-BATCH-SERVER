@@ -7,7 +7,7 @@ import queueBatchProcessor from "../utils/queue-batch-processor";
 
 setInterval(async () => {
   await queueBatchProcessor(queue, logstashClient);
-}, 1000);
+}, 10000);
 
 router.post("/log", async (req: Request, res: Response) => {
   try {
