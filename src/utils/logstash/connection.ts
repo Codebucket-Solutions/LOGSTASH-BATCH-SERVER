@@ -124,16 +124,27 @@ export class SecureConnection extends Connection {
   ): tls.ConnectionOptions {
     const sslKey = options.ssl_key;
     const sslCert = options.ssl_cert;
+    const sslKeyContent = options.ssl_key_content;
+    const sslCertContent = options.ssl_cert_content;
     const ca = options.ca;
+    const caContent = options.ca_content;
     const sslPassphrase = options.ssl_passphrase;
-    const rejectUnauthorized = options.rejectUnauthorized;
+    const rejectUnauthorized = options.rejectUnauthorized ? true : false;
 
     const secureContextOptions = {
-      key: sslKey && readFileSync(sslKey),
-      cert: sslCert && readFileSync(sslCert),
+      key: sslKey
+        ? readFileSync(sslKey)
+        : sslKeyContent
+        ? sslKeyContent
+        : undefined,
+      cert: sslCert
+        ? readFileSync(sslCert)
+        : sslCertContent
+        ? sslCertContent
+        : undefined,
       passphrase: sslPassphrase || undefined,
       rejectUnauthorized: rejectUnauthorized!,
-      ca: ca && readFileSync(ca),
+      ca: ca ? readFileSync(ca) : caContent ? caContent : undefined,
     };
 
     return secureContextOptions;
