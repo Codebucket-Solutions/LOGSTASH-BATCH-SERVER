@@ -12,6 +12,7 @@ export default class LogstashTransport {
       ? new SecureConnection(options)
       : new PlainConnection(options);
     this.manager = new Manager(options, this.connection);
+    this.manager.on("connected", options.connected_logger.bind(this));
     this.manager.on("error", options.error_logger.bind(this));
     this.manager.start();
   }
@@ -23,4 +24,4 @@ export default class LogstashTransport {
   close() {
     this.manager.close();
   }
-};
+}

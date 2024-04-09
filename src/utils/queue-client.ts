@@ -1,5 +1,5 @@
 import { Queue } from "bullmq";
-export default new Queue("logs", {
+const queue = new Queue("logs", {
   connection: {
     host: process.env.REDIS_HOST,
     username: process.env.REDIS_USERNAME,
@@ -11,3 +11,12 @@ export default new Queue("logs", {
   },
   prefix: process.env.QUEUE_PREFIX,
 });
+
+async function checkQueueHealth(queue: Queue) {
+  const jobCounts = await queue.getJobCounts();
+  console.log("Connection Established With Redis Queue", jobCounts);
+}
+
+checkQueueHealth(queue);
+
+export default queue;

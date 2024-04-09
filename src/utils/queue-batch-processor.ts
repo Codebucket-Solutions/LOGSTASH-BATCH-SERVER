@@ -7,11 +7,12 @@ export default async (queue: Queue, logstash: Logstash) => {
   for (let job of jobs) {
     jobData.push(job.data);
   }
-  if(jobData.length>0) {
+  if (jobData.length > 0) {
     logstash.log(jobData, async () => {
-        for (let job of jobs) {
-          await job.remove();
-        }
-      });
+      for (let job of jobs) {
+        await job.remove();
+      }
+      console.log("Pushed %d Logs To Logstash", jobData.length);
+    });
   }
 };

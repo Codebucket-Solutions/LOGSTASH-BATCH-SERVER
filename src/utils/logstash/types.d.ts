@@ -14,6 +14,7 @@ interface LogstashTransportSSLOptions {
 
 interface LogstashTransportOptions extends LogstashTransportSSLOptions {
   error_logger: (...args: any[]) => void;
+  connected_logger: () => void;
   host?: string;
   port?: number;
   node_name?: string;

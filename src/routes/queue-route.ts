@@ -33,6 +33,7 @@ router.post("/log", async (req: Request, res: Response) => {
         data: log,
       }))
     );
+    console.log("Received %d Logs", logs.length);
     res.json({
       success: true,
     });
